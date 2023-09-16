@@ -16,7 +16,7 @@ interface yAxisProps {
 interface GenericChartProps {
   grid?: object
   chartTitle?: string
-  xAxisData?: string[]
+  xAxisData?: any
   yAxisData?: yAxisProps[] | yAxisProps
   theme?: string
   series?: IChartSeries[]
@@ -112,6 +112,7 @@ export const GenericChart = ({
       lazyUpdate={true}
       theme={theme}
       onChartReady={cbFn}
+      
     />
   )
 }
