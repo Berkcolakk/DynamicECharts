@@ -1,0 +1,31 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["@typescript-eslint", "react"],
+  "rules": {
+    "multiline-ternary":"off",
+    "semi": 0,
+    "react/display-name": 0,
+    "@typescript-eslint/no-var-requires": 1,
+    "@typescript-eslint/ban-ts-comment": 1,
+    "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-unused-vars": 1,
+    "prefer-arrow-callback": 2,
+    "react/self-closing-comp": 2,
+    "react/react-in-jsx-scope": 0,
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "no-undef": "warn",
+    "no-var": "error",
+    "quotes": [2, "double", "avoid-escape"],
+    "no-underscore-dangle": "error",
+    "func-style": ["error", "expression"]
+  }
+}
