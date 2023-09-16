@@ -15,7 +15,8 @@ export const getPieChartData = async (dynamicService: IDynamicService) => {
   const result = insertOrUpdateChartArr({
     data: data,
     charts: dynamicService.chart,
-    xAxisKeyName: dynamicService.xAxisKeyName
+    xAxisKeyName: dynamicService.xAxisKeyName,
+    yAxisKeyName: dynamicService.yAxisKeyName
   })
   return { type: "pie", name: "", data: result.series }
 }
@@ -24,21 +25,24 @@ export const getDynamicChartData = async (dynamicService: IDynamicService) => {
   return insertOrUpdateChartArr({
     data: data,
     charts: dynamicService.chart,
-    xAxisKeyName: dynamicService.xAxisKeyName
+    xAxisKeyName: dynamicService.xAxisKeyName,
+    yAxisKeyName: dynamicService.yAxisKeyName
   })
 }
 
 const insertOrUpdateChartArr = ({
   data,
   charts,
-  xAxisKeyName
+  xAxisKeyName,
+  yAxisKeyName
 }: {
   data: any
   charts: IChartOptions[]
   xAxisKeyName: string
+  yAxisKeyName: string
 }) => {
   const xAxis = []
-
+  const yAxis = [];
   const series = [] as IChartSeries[]
   for (let index = 0; index < data.length; index++) {
     const element = data[index]
@@ -59,9 +63,11 @@ const insertOrUpdateChartArr = ({
       series.push({ type: chartInfo.chartType, name: name, smooth: false, data: val })
     }
     xAxis.push(element[xAxisKeyName])
+    yAxis.push(element[yAxisKeyName]);
   }
   return {
     series: series,
-    xAxis: xAxis
+    xAxis: xAxis,
+    yAxis: yAxis
   }
 }

@@ -1,7 +1,7 @@
 import ReactECharts from "echarts-for-react"
-import { IChartOptions, IChartSeries, IDynamicService } from "../../types/chartTypes"
+import { IChartSeries, IDynamicService } from "../../types/chartTypes"
 import React, { useEffect, useState } from "react"
-import { getDynamicChartData, getIndicatorById } from "../../services/chart"
+import { getDynamicChartData } from "../../services/chart"
 import useSWR from "swr"
 interface yAxisProps {
   type: string
@@ -13,7 +13,7 @@ interface yAxisProps {
   axisLabel?: object
 }
 
-interface LineChartProps {
+interface GenericChartProps {
   grid?: object
   chartTitle?: string
   xAxisData?: string[]
@@ -25,12 +25,8 @@ interface LineChartProps {
   dynamicService: IDynamicService
   textColor: string
   refreshRefetchMs: number
-  legend: object
+  legend?: object
 }
-interface xAxis {
-  name: string
-}
-
 export const GenericChart = ({
   chartTitle,
   grid,
@@ -44,7 +40,7 @@ export const GenericChart = ({
   textColor,
   refreshRefetchMs,
   legend
-}: LineChartProps) => {
+}: GenericChartProps) => {
   const { data, error, isLoading } = useSWR(
     chartTitle,
     async () => {
@@ -53,7 +49,8 @@ export const GenericChart = ({
     { refreshInterval: refreshRefetchMs }
   )
   const [chartData, setChartData] = useState<any>(series || [])
-  const [ChartXAxisData, setChartXAxisData] = useState<any[] | undefined>(xAxisData || [])
+  const [chartXAxisData, setChartXAxisData] = useState<any[] | undefined>(xAxisData || [])
+  const [chartYAxisData, setChartYAxisData] = useState<yAxisProps[] | yAxisProps | undefined>(yAxisData);
   useEffect(() => {
     const getData = async () => {
       if (series && series?.length > 0) {
@@ -61,6 +58,7 @@ export const GenericChart = ({
       }
       setChartData(data?.series)
       setChartXAxisData(data?.xAxis)
+      setChartYAxisData(data?.yAxis)
     }
     getData()
   }, [data, isLoading])
@@ -88,12 +86,13 @@ export const GenericChart = ({
       order: isAnimation && "valueDesc",
       trigger: "axis"
     },
-    xAxis: {
+    xAxis: chartXAxisData || {
       type: "category",
-      data: ChartXAxisData
+      data: chartXAxisData
     },
-    yAxis: yAxisData || {
-      type: "value"
+    yAxis: chartYAxisData || {
+      type: "value",
+      data: chartYAxisData
     },
     grid: grid
       ? grid

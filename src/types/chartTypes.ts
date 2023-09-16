@@ -17,5 +17,6 @@ export interface IDynamicService {
   dataUrl: string
   chart: IChartOptions[]
   xAxisKeyName: string
+  yAxisKeyName: string
   dataPath: string
 }
