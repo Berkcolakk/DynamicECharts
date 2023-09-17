@@ -4,7 +4,6 @@ import { getPieChartData } from "../../../services/chart";
 import { IDynamicService } from "../../../types/chartTypes";
 import useSWR from "swr";
 import LoadingBox from "../../LoadingBox";
-import { onErrorSWR } from "../../../utils";
 export interface IPieChartSeries {
   name?: string | null
   type: string
@@ -42,7 +41,7 @@ export const PieChart = ({
   chartTitle,
   refreshRefetchMs
 }: IPieChartProps) => {
-  const { data, error, isLoading } = useSWR(
+  const { data } = useSWR(
     chartTitle,
     async () => {
       return await getPieChartData(dynamicService);
@@ -63,7 +62,7 @@ export const PieChart = ({
     };
 
     getData();
-  }, [data, isLoading]);
+  }, [data]);
   const length: number | any = series?.length;
   const customTooltipFormatter = (params: any) => {
     let dataItem;
@@ -144,19 +143,17 @@ export const PieChart = ({
       },
     series: chartData
   };
+  if (!data) return <LoadingBox />;
 
   return (
     <>
-      {isLoading
-        ? <LoadingBox /> :
-        <ReactECharts
-          option={option}
-          notMerge={true}
-          lazyUpdate={true}
-          onChartReady={cbFn}
-          theme={theme}
-        />
-      }
+      <ReactECharts
+        option={option}
+        notMerge={true}
+        lazyUpdate={true}
+        onChartReady={cbFn}
+        theme={theme}
+      />
     </>
   );
 };

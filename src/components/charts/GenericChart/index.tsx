@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { getDynamicChartData } from "../../../services/chart";
 import useSWR from "swr";
 import LoadingBox from "../../LoadingBox";
-import { onErrorSWR } from "../../../utils";
 export interface IyAxisProps {
   type: string
   name?: string
@@ -41,9 +40,10 @@ export const GenericChart = ({
   dynamicService,
   textColor,
   refreshRefetchMs,
-  legend
+  legend,
+  
 }: IGenericChartProps) => {
-  const { data, error, isLoading } = useSWR(
+  const { data } = useSWR(
     chartTitle,
     async () => {
       return await getDynamicChartData(dynamicService);
@@ -65,7 +65,7 @@ export const GenericChart = ({
       setChartYAxisData(data?.yAxis);
     };
     getData();
-  }, [data, isLoading]);
+  }, [data]);
   const option = {
     animationDuration: isAnimation && 10000,
     title: {
@@ -108,19 +108,16 @@ export const GenericChart = ({
       },
     series: chartData
   };
-
+  if (!data) return <LoadingBox />;
   return (
     <>
-      {isLoading
-        ? <LoadingBox /> :
-        <ReactECharts
-          option={option}
-          notMerge={true}
-          lazyUpdate={true}
-          theme={theme}
-          onChartReady={cbFn}
-
-        />}
+      <ReactECharts
+        option={option}
+        notMerge={true}
+        lazyUpdate={true}
+        theme={theme}
+        onChartReady={cbFn}
+      />
     </>
   );
 };
