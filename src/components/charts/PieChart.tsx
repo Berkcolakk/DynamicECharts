@@ -5,7 +5,7 @@ import { IDynamicService } from "../../types/chartTypes";
 import useSWR from "swr";
 import LoadingBox from "../LoadingBox";
 
-interface IPieChartSeries {
+export interface IPieChartSeries {
   name?: string | null
   type: string
   radius?: string | string[] | number | number[]
@@ -15,7 +15,7 @@ interface IPieChartSeries {
   emphasis?: { [key: string]: any } | null | undefined
 }
 
-interface PieChartProps {
+export interface IPieChartProps {
   theme?: string
   isScroll?: boolean
   series?: IPieChartSeries[]
@@ -41,7 +41,7 @@ export const PieChart = ({
   textColor,
   chartTitle,
   refreshRefetchMs
-}: PieChartProps) => {
+}: IPieChartProps) => {
   const { data, error, isLoading } = useSWR(
     chartTitle,
     async () => {

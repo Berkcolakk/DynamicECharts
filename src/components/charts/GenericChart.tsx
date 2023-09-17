@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getDynamicChartData } from "../../services/chart";
 import useSWR from "swr";
 import LoadingBox from "../LoadingBox";
-interface yAxisProps {
+export interface IyAxisProps {
   type: string
   name?: string
   alignTicks?: boolean
@@ -14,11 +14,11 @@ interface yAxisProps {
   axisLabel?: object
 }
 
-interface GenericChartProps {
+export interface IGenericChartProps {
   grid?: object
   chartTitle?: string
   xAxisData?: any
-  yAxisData?: yAxisProps[] | yAxisProps
+  yAxisData?: IyAxisProps[] | IyAxisProps
   theme?: string
   series?: IChartSeries[]
   cbFn?: () => void
@@ -41,7 +41,7 @@ export const GenericChart = ({
   textColor,
   refreshRefetchMs,
   legend
-}: GenericChartProps) => {
+}: IGenericChartProps) => {
   const { data, error, isLoading } = useSWR(
     chartTitle,
     async () => {
@@ -51,7 +51,7 @@ export const GenericChart = ({
   );
   const [chartData, setChartData] = useState<any>(series || []);
   const [chartXAxisData, setChartXAxisData] = useState<any[] | undefined>(xAxisData || []);
-  const [chartYAxisData, setChartYAxisData] = useState<yAxisProps[] | yAxisProps | undefined>(yAxisData);
+  const [chartYAxisData, setChartYAxisData] = useState<IyAxisProps[] | IyAxisProps | undefined>(yAxisData);
   useEffect(() => {
     const getData = async () => {
       if (series && series?.length > 0) {
