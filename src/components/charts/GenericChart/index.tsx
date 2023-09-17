@@ -27,6 +27,7 @@ export interface IGenericChartProps {
   textColor: string
   refreshRefetchMs: number
   legend?: object
+  swrCallBackFnc?: (dynamicService: IDynamicService) => any
 }
 export const GenericChart = ({
   chartTitle,
@@ -41,12 +42,15 @@ export const GenericChart = ({
   textColor,
   refreshRefetchMs,
   legend,
-  
+  swrCallBackFnc
 }: IGenericChartProps) => {
   const { data } = useSWR(
     chartTitle,
     async () => {
-      return await getDynamicChartData(dynamicService);
+      if (!swrCallBackFnc) {
+        return getDynamicChartData(dynamicService);
+      }
+      return await swrCallBackFnc(dynamicService);
     },
     {
       refreshInterval: refreshRefetchMs
@@ -108,7 +112,7 @@ export const GenericChart = ({
       },
     series: chartData
   };
-  if (!data) return <LoadingBox />;
+  if (chartData?.length === 0) return <LoadingBox />;
   return (
     <>
       <ReactECharts

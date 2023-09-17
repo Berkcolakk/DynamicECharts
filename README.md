@@ -287,7 +287,6 @@ registerThemes({
 - [echarts-for-react](https://www.npmjs.com/package/echarts-for-react)
 - [jsonpath](https://www.npmjs.com/package/jsonpath)
 - [swr](https://www.npmjs.com/package/swr)
-- [react-toastify](https://www.npmjs.com/package/react-toastify)
 
 ## Geliştirme Bağımlılıkları
 - [bunchee](https://github.com/huozhi/bunchee)

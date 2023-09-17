@@ -10,7 +10,7 @@ const GenericChart = (props: IGenericChartProps) => {
         </Provider>
     );
 };
-const PieChart = (props: IPieChartProps) => {
+const PieChart = (props: IGenericChartProps) => {
     return (
         <Provider>
             <Pie {...props}  />
