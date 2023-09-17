@@ -6,9 +6,7 @@ Dinamik bir şekilde chart oluşturmak için yazıldı. Herhangi bir endpoint ad
 
 ## Dağıtım
 
-- "dist" klasörü içerisine build alacaktır.
-- dist/index.js dosyasında yer alan if içerisindeki production.min.js satırının kalacağı şekilde düzenlemesi gerek. 
-- dist içerisinde yer alan development ve .esm ile alakalı dosyaların hepsi silinecek.
+- "dist" klasörü içerisine index.d.ts ve index.js olarak iki dosya oluşturacaktır. 
 
 ```bash
   npm run build
@@ -283,11 +281,15 @@ registerThemes({
       ]
   })
 ```
-## Bağımlılıklar
 
-Kütüphanenin kullanıldığı projede olması gereken bağımlılıklar aşağıda yer almaktadır.
-
+## Proje Bağımlılıklar
 - [Apache ECharts](https://echarts.apache.org/en/index.html)
 - [echarts-for-react](https://www.npmjs.com/package/echarts-for-react)
 - [jsonpath](https://www.npmjs.com/package/jsonpath)
 - [swr](https://www.npmjs.com/package/swr)
+
+## Geliştirme Bağımlılıkları
+- [bunchee](https://github.com/huozhi/bunchee)
+- [babel](https://babeljs.io/)
+- [eslint](https://eslint.org/)
+- [typescript](https://www.typescriptlang.org/)
