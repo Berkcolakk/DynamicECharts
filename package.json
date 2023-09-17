@@ -35,8 +35,8 @@
     "swr": "^2.2.2"
   },
   "scripts": {
-    "build": "bunchee ./src/index.tsx -f cjs -o ./dist/bundle.js -m ",
-    "eslintFix": "eslint src/** --fix"
+    "build": "npm run eslint-fix && bunchee ./src/index.tsx -f cjs  -o ./dist/index.js -m ",
+    "eslint-fix": "eslint src/** --fix"
   },
   "browserslist": {
     "production": [

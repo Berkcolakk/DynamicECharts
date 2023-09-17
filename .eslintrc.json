@@ -2,26 +2,37 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json"
+    // "extraFileExtensions": [".css"]
+  },
+  "settings": {
+    "react": {
+      "version": "16.5.2" // Kullandığınız React sürümünü belirtin
+    }
   },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended"
+    // "plugin:css/recommended"
   ],
-  "plugins": ["@typescript-eslint", "react"],
+  "plugins": [
+    "@typescript-eslint",
+    "react"
+    // "css"
+  ],
   "rules": {
-    "multiline-ternary":"off",
-    "semi": 0,
-    "react/display-name": 0,
+    "multiline-ternary": "warn",
+    "semi": 1,
+    "react/display-name": 1,
     "@typescript-eslint/no-var-requires": 1,
     "@typescript-eslint/ban-ts-comment": 1,
     "@typescript-eslint/no-explicit-any": 1,
     "@typescript-eslint/no-unused-vars": 1,
     "prefer-arrow-callback": 2,
     "react/self-closing-comp": 2,
-    "react/react-in-jsx-scope": 0,
+    "react/react-in-jsx-scope": 1,
     "no-console": "warn",
-    "no-debugger": "warn",
+    "no-debugger": "error",
     "no-undef": "warn",
     "no-var": "error",
     "quotes": [2, "double", "avoid-escape"],

@@ -1,8 +1,9 @@
-import ReactECharts from "echarts-for-react"
-import { IChartSeries, IDynamicService } from "../../types/chartTypes"
-import React, { useEffect, useState } from "react"
-import { getDynamicChartData } from "../../services/chart"
-import useSWR from "swr"
+import ReactECharts from "echarts-for-react";
+import { IChartSeries, IDynamicService } from "../../types/chartTypes";
+import React, { useEffect, useState } from "react";
+import { getDynamicChartData } from "../../services/chart";
+import useSWR from "swr";
+import LoadingBox from "../LoadingBox";
 interface yAxisProps {
   type: string
   name?: string
@@ -44,24 +45,24 @@ export const GenericChart = ({
   const { data, error, isLoading } = useSWR(
     chartTitle,
     async () => {
-      return await getDynamicChartData(dynamicService)
+      return await getDynamicChartData(dynamicService);
     },
     { refreshInterval: refreshRefetchMs }
-  )
-  const [chartData, setChartData] = useState<any>(series || [])
-  const [chartXAxisData, setChartXAxisData] = useState<any[] | undefined>(xAxisData || [])
+  );
+  const [chartData, setChartData] = useState<any>(series || []);
+  const [chartXAxisData, setChartXAxisData] = useState<any[] | undefined>(xAxisData || []);
   const [chartYAxisData, setChartYAxisData] = useState<yAxisProps[] | yAxisProps | undefined>(yAxisData);
   useEffect(() => {
     const getData = async () => {
       if (series && series?.length > 0) {
-        return
+        return;
       }
-      setChartData(data?.series)
-      setChartXAxisData(data?.xAxis)
-      setChartYAxisData(data?.yAxis)
-    }
-    getData()
-  }, [data, isLoading])
+      setChartData(data?.series);
+      setChartXAxisData(data?.xAxis);
+      setChartYAxisData(data?.yAxis);
+    };
+    getData();
+  }, [data, isLoading]);
   const option = {
     animationDuration: isAnimation && 10000,
     title: {
@@ -103,16 +104,20 @@ export const GenericChart = ({
         containLabel: true
       },
     series: chartData
-  }
+  };
 
   return (
-    <ReactECharts
-      option={option}
-      notMerge={true}
-      lazyUpdate={true}
-      theme={theme}
-      onChartReady={cbFn}
-      
-    />
-  )
-}
+    <>
+      {isLoading
+        ? <LoadingBox /> :
+        <ReactECharts
+          option={option}
+          notMerge={true}
+          lazyUpdate={true}
+          theme={theme}
+          onChartReady={cbFn}
+
+        />}
+    </>
+  );
+};
