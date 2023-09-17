@@ -1,5 +1,5 @@
 import React from "react";
-import injectStyle from "../../utils";
+import { injectStyle } from "../../utils";
 const LoadingBox = () => {
     injectStyle(`@keyframes s3 {
         to {

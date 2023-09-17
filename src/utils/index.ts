@@ -1,12 +1,6 @@
-const injectStyle = (style: string) => {
+export const injectStyle = (style: string) => {
     const styleElement = document.createElement("style");
-    let styleSheet = null;
-
     document.head.appendChild(styleElement);
-
-    styleSheet = styleElement.sheet;
-
+    const styleSheet = styleElement.sheet;
     styleSheet?.insertRule(style, styleSheet.cssRules.length);
 };
-
-export default injectStyle;

@@ -1,6 +1,5 @@
-import {registerTheme} from "echarts";
-export { GenericChart } from "./components/charts/GenericChart";
-export { PieChart } from "./components/charts/PieChart";
+import { registerTheme } from "echarts";
+export { GenericChart, PieChart } from "./components/charts";
 import { IChartSeries } from "./types/chartTypes";
 interface ITheme {
   themeName: string
@@ -11,4 +10,3 @@ export const registerThemes = ({ themes }: { themes: ITheme[] }) => {
     registerTheme(theme.themeName, theme.obj);
   });
 };
-
