@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getDynamicChartData } from "../../services/chart";
 import useSWR from "swr";
 import LoadingBox from "../LoadingBox";
-import { toast } from "react-toastify";
+import { onErrorSWR } from "../../utils";
 export interface IyAxisProps {
   type: string
   name?: string
@@ -49,12 +49,7 @@ export const GenericChart = ({
       return await getDynamicChartData(dynamicService);
     },
     {
-      refreshInterval: refreshRefetchMs, onError(err, key, config) {
-        // eslint-disable-next-line quotes
-        toast.error(`${chartTitle?.substring(0, 15)}... Grafik yüklenemedi. Bir hata oluştu.`);
-        // eslint-disable-next-line no-console, no-undef
-        console.error({ err, key, config });
-      },
+      refreshInterval: refreshRefetchMs
     }
   );
   const [chartData, setChartData] = useState<any>(series || []);

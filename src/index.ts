@@ -1,6 +1,7 @@
 import { registerTheme } from "echarts";
 export { GenericChart, PieChart } from "./components/charts";
 import { IChartSeries } from "./types/chartTypes";
+
 export interface ITheme {
   themeName: string
   obj: object

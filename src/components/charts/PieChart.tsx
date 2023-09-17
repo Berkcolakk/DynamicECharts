@@ -4,7 +4,7 @@ import { getPieChartData } from "../../services/chart";
 import { IDynamicService } from "../../types/chartTypes";
 import useSWR from "swr";
 import LoadingBox from "../LoadingBox";
-
+import { onErrorSWR } from "../../utils";
 export interface IPieChartSeries {
   name?: string | null
   type: string
@@ -47,7 +47,9 @@ export const PieChart = ({
     async () => {
       return await getPieChartData(dynamicService);
     },
-    { refreshInterval: refreshRefetchMs }
+    {
+      refreshInterval: refreshRefetchMs
+    }
   );
   const [chartData, setChartData] = useState<any>(series || []);
 
@@ -65,10 +67,10 @@ export const PieChart = ({
   const length: number | any = series?.length;
   const customTooltipFormatter = (params: any) => {
     let dataItem;
-      let value;
-      let totalValue;
-      let percentage;
-      let text = "";
+    let value;
+    let totalValue;
+    let percentage;
+    let text = "";
 
     const dataIndex = params.dataIndex;
 
@@ -111,7 +113,7 @@ export const PieChart = ({
 
             return ` ${params.marker} ${name} <br/>${value} (${percent}%)`;
           },
-      position (pos: any, params: any, el: any, elRect: any, size: any) {
+      position(pos: any, params: any, el: any, elRect: any, size: any) {
         const obj: any = { marginTop: "1px" };
 
         obj[["left", "right"][Number(pos[0] < size.viewSize[0] / 4)]] = 0;
