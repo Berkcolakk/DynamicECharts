@@ -1,10 +1,10 @@
 import ReactECharts from "echarts-for-react";
 import React, { useEffect, useState } from "react";
-import { getPieChartData } from "../../services/chart";
-import { IDynamicService } from "../../types/chartTypes";
+import { getPieChartData } from "../../../services/chart";
+import { IDynamicService } from "../../../types/chartTypes";
 import useSWR from "swr";
-import LoadingBox from "../LoadingBox";
-import { onErrorSWR } from "../../utils";
+import LoadingBox from "../../LoadingBox";
+import { onErrorSWR } from "../../../utils";
 export interface IPieChartSeries {
   name?: string | null
   type: string

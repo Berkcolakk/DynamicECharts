@@ -1,10 +1,10 @@
 import ReactECharts from "echarts-for-react";
-import { IChartSeries, IDynamicService } from "../../types/chartTypes";
+import { IChartSeries, IDynamicService } from "../../../types/chartTypes";
 import React, { useEffect, useState } from "react";
-import { getDynamicChartData } from "../../services/chart";
+import { getDynamicChartData } from "../../../services/chart";
 import useSWR from "swr";
-import LoadingBox from "../LoadingBox";
-import { onErrorSWR } from "../../utils";
+import LoadingBox from "../../LoadingBox";
+import { onErrorSWR } from "../../../utils";
 export interface IyAxisProps {
   type: string
   name?: string

@@ -1,6 +1,6 @@
 import { GenericChart as Generic, IGenericChartProps } from "./GenericChart";
 import { IPieChartProps, PieChart as Pie } from "./PieChart";
-import React, { ReactNode } from "react";
+import React from "react";
 import Provider from "../Provider";
 
 const GenericChart = (props: IGenericChartProps) => {
@@ -13,7 +13,7 @@ const GenericChart = (props: IGenericChartProps) => {
 const PieChart = (props: IPieChartProps) => {
     return (
         <Provider>
-            <Pie {...props} />
+            <Pie {...props}  />
         </Provider>
     );
 };
