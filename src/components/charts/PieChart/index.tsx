@@ -6,8 +6,8 @@ import { GenericChart, IGenericChartProps } from "../GenericChart";
 export const PieChart = (props: IGenericChartProps) => {
   return (
     <GenericChart {...props}
-      swrCallBackFnc={(dynamicService: IDynamicService) => {
-        return getPieChartData(dynamicService);
+      swrCallBackFnc={async (dynamicService: IDynamicService) => {
+        return await getPieChartData(dynamicService);
       }} />
   );
 };
