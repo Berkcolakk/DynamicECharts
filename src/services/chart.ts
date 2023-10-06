@@ -1,83 +1,116 @@
-import type { IChartOptions, IChartSeries, IDynamicService } from "../types/chartTypes";
-import jsonpath from "jsonpath";
+import type { ICustomInfo, IDataCustomInfo } from 'components/Charts/GenericChart';
+import type { IChartOptions, IChartSeries, IDynamicService } from '../types/chartTypes';
+import jsonpath from 'jsonpath';
 
-const getData = async (dynamicService: IDynamicService) => {
-  const result = await fetch(dynamicService.dataUrl);
-  const response = await result.json();
-  const data = jsonpath.query(response, dynamicService.dataPath)[0];
-
-  return data;
-};
-
-export const getPieChartData = async (dynamicService: IDynamicService) => {
-  const data = await getData(dynamicService);
-  const result = insertOrUpdateChartArr({
-    data,
-    charts: dynamicService.chart,
-    xAxisKeyName: dynamicService.xAxisKeyName,
-    yAxisKeyName: dynamicService.yAxisKeyName
+const addCustomInfo = ({ data, dataCustomInfo }:
+  {
+    data: any;
+    dataCustomInfo?: IDataCustomInfo[]
+  }) => {
+  const arr = [] as ICustomInfo[];
+  dataCustomInfo?.forEach((item: IDataCustomInfo) => {
+    if (item.keyName) {
+      const val = jsonpath.query(data, item.keyName)[0];
+      arr.push({
+        label: item.label,
+        value: val,
+        valueText: item.valueText
+      });
+    }
   });
-
-  return { type: "pie", name: "", data: result.series };
-};
-export const getDynamicChartData = async (dynamicService: IDynamicService) => {
-  const data = await getData(dynamicService);
-
-  return insertOrUpdateChartArr({
-    data,
-    charts: dynamicService.chart,
-    xAxisKeyName: dynamicService.xAxisKeyName,
-    yAxisKeyName: dynamicService.yAxisKeyName
-  });
+  return arr;
 };
 
 const insertOrUpdateChartArr = ({
   data,
   charts,
   xAxisKeyName,
-  yAxisKeyName
+  yAxisKeyName,
+  dataCustomInfo
 }: {
   data: any
   charts: IChartOptions[]
-  xAxisKeyName: string
-  yAxisKeyName: string
+  xAxisKeyName?: string
+  yAxisKeyName?: string;
+  dataCustomInfo?: IDataCustomInfo[]
 }) => {
   const xAxis = [];
   const yAxis = [];
   const series = [] as IChartSeries[];
+  for (let x = 0; x < charts.length; x++) {
+    const seriesData = [] as any;
+    const chartInfo = charts[x];
+    let name = chartInfo.chartName ?? '';
 
-  for (let index = 0; index < data.length; index++) {
-    const element = data[index];
-
-    for (let x = 0; x < charts.length; x++) {
-      const chartInfo = charts[x];
-      const name = jsonpath.query(element, chartInfo.keyJson)[0];
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
+      if (chartInfo.keyJson) {
+        name = jsonpath.query(element, chartInfo.keyJson)[0];
+      }
       const val = jsonpath.query(element, chartInfo.dataJson)[0];
-
-      if (chartInfo.chartType === "pie") {
-        series.push({ value: val, name, type: chartInfo.chartType });
-        continue;
+      //ChartInfonun ilk döngüsünde çiftlememesi için x ve y axislerin yazdırılma işlemidir.
+      if (x === 0) {
+        if (xAxisKeyName) {
+          xAxis.push(element[xAxisKeyName]);
+        }
+        if (yAxisKeyName) {
+          yAxis.push(element[yAxisKeyName]);
+        }
       }
-
-      const objIndex = series.findIndex(obj => obj.name === name);
-
-      if (objIndex !== -1) {
-        const item = series.filter(obj => obj.name === name)[0];
-
-        series[objIndex] = { type: chartInfo.chartType, name, data: [...item.data, val] };
-        continue;
-      }
-
-      series.push({ type: chartInfo.chartType, name, smooth: false, data: val });
+      seriesData.push({ value: val, name: name, xAxisIndex: x, });
     }
-
-    xAxis.push(element[xAxisKeyName]);
-    yAxis.push(element[yAxisKeyName]);
+    if (!Array.isArray(data) && seriesData.length === 0) {
+      if (chartInfo.keyJson) {
+        name = jsonpath.query(data, chartInfo.keyJson)[0];
+      }
+      const val = jsonpath.query(data, chartInfo.dataJson)[0];
+      seriesData.push({ value: val, name: name });
+    }
+    series.push({
+      name: name, type: chartInfo.chartType, data: seriesData
+    });
   }
-
+  const customDataInfos = addCustomInfo({ data: data, dataCustomInfo: dataCustomInfo });
   return {
     series,
     xAxis,
-    yAxis
+    yAxis,
+    customDataInfos
   };
 };
+
+const getData = async (dynamicService: IDynamicService) => {
+  // eslint-disable-next-line no-undef
+  const result = await fetch(dynamicService.dataUrl);
+  const response = await result.json();
+  if (dynamicService.dataPath !== undefined) {
+    return jsonpath.query(response, dynamicService.dataPath)[0];
+  }
+  return response;
+};
+
+export const getPieChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {
+  const data = await getData(dynamicService);
+  return insertOrUpdateChartArr({
+    data,
+    charts: dynamicService.chart,
+    xAxisKeyName: dynamicService.xAxisKeyName,
+    yAxisKeyName: dynamicService.yAxisKeyName,
+    dataCustomInfo
+  });
+  
+};
+export const getDynamicChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {
+  const data = await getData(dynamicService);
+  return insertOrUpdateChartArr({
+    data,
+    charts: dynamicService.chart,
+    xAxisKeyName: dynamicService?.xAxisKeyName,
+    yAxisKeyName: dynamicService?.yAxisKeyName,
+    dataCustomInfo
+  });
+};
+
+
+
+

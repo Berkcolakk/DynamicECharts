@@ -1,5 +1,5 @@
-import SWRProvider from "../SWRProvider";
-import React, { ReactNode } from "react";
+import SWRProvider from '../SWRProvider';
+import type { ReactNode } from 'react';
 
 const Provider = ({ children }: { children: ReactNode }) => {
     return (

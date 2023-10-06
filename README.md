@@ -198,27 +198,24 @@ import { GenericChart } from "lib/dist"
 
 const index = () => {
   return (
-    <GenericChart
+  <GenericChart
       chartTitle='Toplam Harcamaların Yüzdesi Olarak Sermaye Harcaması'
-      // xAxisData={["2019", "2020", "2021"]}
-      // series={[
-      //   { name: "test", type: "line", data: [1, 2, 3] },
-      //   { name: "test 2", type: "bar", data: [1, 2, 3] }
-      // ]}
       dynamicService={{
         dataUrl:
           `${env.API.ORION}ngsi-ld/v1/entities?type=Indicator&limit=1000&q=indicatorSubGroupId==${22};subIndicatorId==${288}`,
         xAxisKeyName: "Year",
         chart: [
           { chartType: "line", dataJson: "formula[0].calculatedResult", keyJson: "formula[0].keyName" },
-          { chartType: "line", dataJson: "inputList[0].value", keyJson: "inputList[0].label" },
-          { chartType: "line", dataJson: "inputList[1].value", keyJson: "inputList[1].label" }
+          { chartType: "bar", dataJson: "inputList[0].value", keyJson: "inputList[0].label" },
+          { chartType: "bar", dataJson: "inputList[1].value", keyJson: "inputList[1].label" }
         ],
-        dataPath:"0.indicatorData.value"
-      }} 
-       refreshRefetchMs={5000}
-       textColor="black"
-       theme="westeros" />
+        dataPath: "0.indicatorData.value"
+      }}
+      xAxisType={"category"}
+      refreshRefetchMs={5000}
+      textColor="black"
+      theme="financeDashboard"
+    />
   )
 }
 export default index;
@@ -290,6 +287,5 @@ registerThemes({
 
 ## Geliştirme Bağımlılıkları
 - [bunchee](https://github.com/huozhi/bunchee)
-- [babel](https://babeljs.io/)
 - [eslint](https://eslint.org/)
 - [typescript](https://www.typescriptlang.org/)

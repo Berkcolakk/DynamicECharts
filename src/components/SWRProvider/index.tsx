@@ -1,7 +1,7 @@
-import React, { ReactNode } from "react";
-import { SWRConfig } from "swr";
-import { onErrorSWR } from "../../utils";
-import { BareFetcher, PublicConfiguration } from "swr/_internal";
+import type { ReactNode } from 'react';
+import { SWRConfig } from 'swr';
+import { onErrorSWR } from '../../utils';
+import type { BareFetcher, PublicConfiguration } from 'swr/_internal';
 const SWRProvider = ({ children }: { children: ReactNode }) => {
     return (
         <SWRConfig value={{

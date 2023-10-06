@@ -1,7 +1,8 @@
-import { GenericChart as Generic, IGenericChartProps } from "./GenericChart";
-import { PieChart as Pie } from "./PieChart";
-import React from "react";
-import Provider from "../Provider";
+import type { IGenericChartProps } from './GenericChart';
+import { GenericChart as Generic } from './GenericChart';
+import { PieChart as Pie } from './PieChart';
+import React from 'react';
+import Provider from '../Provider';
 
 const GenericChart = (props: IGenericChartProps) => {
     return (
