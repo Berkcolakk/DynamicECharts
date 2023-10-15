@@ -1,10 +1,50 @@
-import ReactECharts from 'echarts-for-react';
-import type { ICustomInfo, IGenericChartProps } from '../../../types/chartTypes';
-import React, { useEffect, useState } from 'react';
-import { getDynamicChartData } from '../../../services/chart';
-import useSWR from 'swr';
-import LoadingBox from '../../LoadingBox';
-
+import ReactECharts, { EChartsReactProps } from "echarts-for-react";
+import { IChartSeries, IDynamicService } from "../../../types/chartTypes";
+import React, { useEffect, useState } from "react";
+import { getDynamicChartData } from "../../../services/chart";
+import useSWR from "swr";
+import LoadingBox from "../../LoadingBox";
+export interface ICustomInfo {
+  value: string;
+  valueText: string;
+  label: string;
+}
+export interface IYAxisProps {
+  type?: string
+  name?: string
+  alignTicks?: boolean
+  axisLine?: object
+  min?: number
+  max?: number
+  axisLabel?: object
+  show?: boolean
+  position?: "left" | "right" | "top" | "bottom"
+  offset?: number;
+}
+export interface IDataCustomInfo {
+  keyName: string;
+  label: string;
+  valueText: string;
+}
+export interface IGenericChartProps {
+  grid?: object
+  chartTitle?: string
+  xAxisData?: any
+  yAxisData?: any
+  theme?: string
+  series?: IChartSeries[]
+  cbFn?: () => void
+  isAnimation?: boolean
+  dynamicService: IDynamicService
+  textColor: string
+  refreshRefetchMs: number
+  swrCallBackFnc?: (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => any | undefined
+  xAxisType?: "category" | "value" | "time" | "log"
+  yAxisType?: "category" | "value" | "time" | "log"
+  dataCustomInfo?: IDataCustomInfo[]
+  legend?: any
+  tooltip?: any
+}
 export const GenericChart = ({
   chartTitle,
   grid,
@@ -21,11 +61,12 @@ export const GenericChart = ({
   xAxisType,
   yAxisType,
   dataCustomInfo,
-  legend
+  legend,
+  tooltip
 }: IGenericChartProps) => {
-  const swrKey = `${dynamicService.dataUrl.substring(dynamicService.dataUrl.lastIndexOf('/'))}_${dynamicService.chart.map((item) => { return item.dataJson; }).join('_')}`;
+
   const { data, error } = useSWR(
-    swrKey,
+    `${dynamicService.dataUrl.substring(dynamicService.dataUrl.lastIndexOf("/") + 1)}_${dynamicService.chart.map((item) => { return item.dataJson; }).join("_")}`,
     async () => {
       if (!swrCallBackFnc) {
         return getDynamicChartData(dynamicService, dataCustomInfo);
@@ -43,6 +84,7 @@ export const GenericChart = ({
   useEffect(() => {
     const getData = async () => {
       try {
+
         if (series && series?.length > 0) {
           return;
         }
@@ -74,27 +116,37 @@ export const GenericChart = ({
     title: chartTitle && {
       textStyle: { color: textColor },
       text: chartTitle,
-      left: 'center'
+      left: "center"
     },
     textStyle: {
-      color: textColor
+      color: textColor,
+      fontFamily: "'DM Sans', sans-serif"
     },
-
     legend: legend
       ?
       legend
       : {
-        type: 'scroll',
-        orient: 'horizontal',
-        bottom: 'bottom',
+        type: "scroll",
+        orient: "horizontal",
+        bottom: "bottom",
         textStyle: {
-          color: textColor
+          color: textColor,
+          fontStyle: "'DM Sans', sans-serif"
         },
+        pageButtonGap: "20",
+        pageIconInactiveColor: "#fff",
+        pageIconColor: "#000",
+        pageTextStyle: "#fff"
       },
-    tooltip: {
-      order: isAnimation && 'valueDesc',
-      trigger: 'axis'
-    },
+    tooltip: tooltip
+      ?
+      tooltip
+      : {
+        order: isAnimation && "valueDesc",
+        trigger: "axis",
+        grid: { containLabel: true },
+        confine: true
+      },
     xAxis: chartXAxisData
       ? chartXAxisData
       : {
@@ -108,24 +160,24 @@ export const GenericChart = ({
     grid: grid
       ? grid
       : {
-        left: '5%',
-        right: '5%',
-        bottom: '5%',
+        left: "5%",
+        right: "5%",
+        bottom: "5%",
         containLabel: true
       },
     series: chartData
   };
   if (chartData?.length === 0) return (<LoadingBox />);
-  if (error) return (<div style={{ display: 'flex', textAlign: 'center' }}>Bir Hata Oluştu.</div>);
+  if (error) return (<>Bir Hata Oluştu.</>);
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: "flex" }}>
       <div style={{
         width:
           customDataInfos
             &&
             customDataInfos?.length > 0
-            ? '75%'
-            : '100%'
+            ? "75%"
+            : "100%"
       }}>
         <ReactECharts
           option={option}
@@ -140,13 +192,13 @@ export const GenericChart = ({
           customDataInfos
             &&
             customDataInfos?.length > 0
-            ? '25%'
-            : '0%', alignSelf: 'center'
+            ? "25%"
+            : "0%", alignSelf: "center"
       }}>
         {customDataInfos?.map((item: ICustomInfo, index: number) => {
           return (
-            <div key={index} style={{ textAlign: 'center', margin: '8px' }}>
-              <p style={{ marginBottom: '5px' }}
+            <div key={index} style={{ textAlign: "center", margin: "8px" }}>
+              <p style={{ marginBottom: "5px" }}
               >{item.label}</p>
               <p>{item.value}{item.valueText}</p>
             </div>

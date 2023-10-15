@@ -1,5 +1,5 @@
-import { registerTheme } from 'echarts';
-export { GenericChart, PieChart } from './components/Charts';
+import { registerTheme } from "echarts";
+export { GenericChart, PieChart } from "./components/Charts";
 export interface ITheme {
   themeName: string
   obj: object

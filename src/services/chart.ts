@@ -1,6 +1,39 @@
-import type { ICustomInfo, IDataCustomInfo } from 'components/Charts/GenericChart';
-import type { IChartOptions, IChartSeries, IDynamicService } from '../types/chartTypes';
-import jsonpath from 'jsonpath';
+import { ICustomInfo, IDataCustomInfo } from "components/Charts/GenericChart";
+import type { IChartOptions, IChartSeries, IDynamicService } from "../types/chartTypes";
+import jsonpath from "jsonpath";
+
+const getData = async (dynamicService: IDynamicService) => {
+  // eslint-disable-next-line no-undef
+  const result = await fetch(dynamicService.dataUrl);
+  const response = await result.json();
+  if (dynamicService.dataPath !== undefined) {
+    return jsonpath.query(response, dynamicService.dataPath)[0];
+  }
+  return response;
+};
+
+export const getPieChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {
+  const data = await getData(dynamicService);
+  return insertOrUpdateChartArr({
+    data,
+    charts: dynamicService.chart,
+    xAxisKeyName: dynamicService.xAxisKeyName,
+    yAxisKeyName: dynamicService.yAxisKeyName,
+    dataCustomInfo
+  });
+  
+};
+export const getDynamicChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {
+  const data = await getData(dynamicService);
+  return insertOrUpdateChartArr({
+    data,
+    charts: dynamicService.chart,
+    xAxisKeyName: dynamicService?.xAxisKeyName,
+    yAxisKeyName: dynamicService?.yAxisKeyName,
+    dataCustomInfo
+  });
+};
+
 
 const addCustomInfo = ({ data, dataCustomInfo }:
   {
@@ -40,7 +73,7 @@ const insertOrUpdateChartArr = ({
   for (let x = 0; x < charts.length; x++) {
     const seriesData = [] as any;
     const chartInfo = charts[x];
-    let name = chartInfo.chartName ?? '';
+    let name = chartInfo.chartName ?? "";
 
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
@@ -78,39 +111,3 @@ const insertOrUpdateChartArr = ({
     customDataInfos
   };
 };
-
-const getData = async (dynamicService: IDynamicService) => {
-  // eslint-disable-next-line no-undef
-  const result = await fetch(dynamicService.dataUrl);
-  const response = await result.json();
-  if (dynamicService.dataPath !== undefined) {
-    return jsonpath.query(response, dynamicService.dataPath)[0];
-  }
-  return response;
-};
-
-export const getPieChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {
-  const data = await getData(dynamicService);
-  return insertOrUpdateChartArr({
-    data,
-    charts: dynamicService.chart,
-    xAxisKeyName: dynamicService.xAxisKeyName,
-    yAxisKeyName: dynamicService.yAxisKeyName,
-    dataCustomInfo
-  });
-  
-};
-export const getDynamicChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {
-  const data = await getData(dynamicService);
-  return insertOrUpdateChartArr({
-    data,
-    charts: dynamicService.chart,
-    xAxisKeyName: dynamicService?.xAxisKeyName,
-    yAxisKeyName: dynamicService?.yAxisKeyName,
-    dataCustomInfo
-  });
-};
-
-
-
-
