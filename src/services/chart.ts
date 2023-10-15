@@ -4,7 +4,7 @@ import jsonpath from "jsonpath";
 
 const getData = async (dynamicService: IDynamicService) => {
   // eslint-disable-next-line no-undef
-  const result = await fetch(dynamicService.dataUrl);
+  const result = await fetch(dynamicService.dataUrl, { body: dynamicService.data });
   const response = await result.json();
   if (dynamicService.dataPath !== undefined) {
     return jsonpath.query(response, dynamicService.dataPath)[0];
@@ -21,7 +21,7 @@ export const getPieChartData = async (dynamicService: IDynamicService, dataCusto
     yAxisKeyName: dynamicService.yAxisKeyName,
     dataCustomInfo
   });
-  
+
 };
 export const getDynamicChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {
   const data = await getData(dynamicService);

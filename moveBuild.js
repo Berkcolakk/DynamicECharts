@@ -3,24 +3,16 @@ const path = require("path");
 const package = require("./package.json");
 
 const outputFolder = path.resolve(__dirname, "dist");
-const smartCity = path.join(
+const prj = path.join(
   require("os").homedir(),
   "source",
   "repos",
-  "SmartCityFrontendReact",
+  "Berksense",
   "src",
   "lib",
   package.name.substring(0, package.name.lastIndexOf("-react") - 1)
 );
-const smartCityAdminPanel = path.join(
-  require("os").homedir(),
-  "source",
-  "repos",
-  "SmartCityAdminPanelFrontend",
-  "src",
-  "lib",
-  package.name.substring(0, package.name.lastIndexOf("-react") - 1)
-);
+
 fs.readdir(outputFolder, (err, files) => {
   if (err) {
     console.error("Error reading output folder: " + err.message);
@@ -28,7 +20,7 @@ fs.readdir(outputFolder, (err, files) => {
   }
   files.forEach((file) => {
     const sourcePath = path.join(outputFolder, file);
-    [smartCityAdminPanel, smartCity].forEach((item) => {
+    [prj].forEach((item) => {
       const destinationPath = path.join(item, file);
       fs.copyFile(sourcePath, destinationPath, (err) => {
         if (err) {

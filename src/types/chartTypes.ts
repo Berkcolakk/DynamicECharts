@@ -20,4 +20,5 @@ export interface IDynamicService {
   xAxisKeyName?: string
   yAxisKeyName?: string
   dataPath?: string
+  data?: any
 }
