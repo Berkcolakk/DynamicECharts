@@ -3,13 +3,28 @@ import type { IChartOptions, IChartSeries, IDynamicService } from "../types/char
 import jsonpath from "jsonpath";
 
 const getData = async (dynamicService: IDynamicService) => {
-  // eslint-disable-next-line no-undef
-  const result = await fetch(dynamicService.dataUrl, { body: dynamicService.data });
-  const response = await result.json();
-  if (dynamicService.dataPath !== undefined) {
-    return jsonpath.query(response, dynamicService.dataPath)[0];
+  try {
+    const urlencoded = new URLSearchParams();
+    urlencoded.append("json", JSON.stringify(dynamicService.data));
+    const opt: RequestInit = dynamicService.data
+      ?
+      {
+        method: "POST",
+        body: urlencoded
+      }
+      :
+      {};
+    const result = await fetch(dynamicService.dataUrl, opt);
+    const response = await result.json();
+    console.log(response);
+    if (dynamicService.dataPath !== undefined) {
+      return jsonpath.query(response, dynamicService.dataPath)[0];
+    }
+    return response;
+  } catch (err) {
+    console.error(err);
+    return err;
   }
-  return response;
 };
 
 export const getPieChartData = async (dynamicService: IDynamicService, dataCustomInfo?: IDataCustomInfo[]) => {

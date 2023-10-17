@@ -11,7 +11,7 @@ export interface IChartSeries {
 export interface IChartOptions {
   keyJson: string
   dataJson: string
-  chartType: "bar" | "line" | "pie"
+  chartType: "bar" | "line" | "pie" | "scatter" | "candlestick" | "boxplot" | "sunburst" | "funnel" | "gauge"
   chartName?: string;
 }
 export interface IDynamicService {

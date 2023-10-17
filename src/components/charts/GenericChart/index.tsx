@@ -82,6 +82,7 @@ export const GenericChart = ({
   const [chartYAxisData, setChartYAxisData] = useState<any>();
   const [customDataInfos, setCustomDataInfos] = useState<ICustomInfo[]>();
   useEffect(() => {
+    console.log(data);
     const getData = async () => {
       try {
 
